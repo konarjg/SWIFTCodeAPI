@@ -1,7 +1,6 @@
 package com.github.konarjg.SWIFTCodeAPI.component;
 
 import com.github.konarjg.SWIFTCodeAPI.entity.SwiftCode;
-import org.apache.poi.EmptyFileException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +38,9 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
         return result;
     }
 
-    private List<SwiftCode> readSpreadsheet(Workbook workbook) {
-        List<SwiftCode> result = new ArrayList<>();
+    private List<SwiftCode> readSpreadsheet(Workbook workbook, HashMap<String, SwiftCode> parents) {
         Sheet sheet = workbook.getSheetAt(0);
+        List<SwiftCode> result = new ArrayList<>();
 
         for (Row row : sheet) {
             if (row.getRowNum() == 0) {
@@ -64,6 +61,10 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
 
             SwiftCode code = parseCode(data);
 
+            if (code.isHeadquarter()) {
+                parents.put(code.getSwiftCode().substring(0, 8), code);
+            }
+
             result.add(code);
         }
 
@@ -79,14 +80,16 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
         try (FileInputStream inputStream = new FileInputStream(file);
              Workbook workbook = WorkbookFactory.create(inputStream)) {
 
-            List<SwiftCode> result = readSpreadsheet(workbook);
+            HashMap<String, SwiftCode> parents = new HashMap<>();
+            List<SwiftCode> result = readSpreadsheet(workbook, parents);
 
             for (SwiftCode code : result) {
-                SwiftCode parent = result.stream()
-                        .filter(swiftCode -> swiftCode.isHeadquarter() && swiftCode.getSwiftCode()
-                                .substring(0, 8)
-                                .equals(code.getSwiftCode().substring(0, 8)))
-                        .findFirst().orElse(null);
+                SwiftCode parent = null;
+                String parentSubstring = code.getSwiftCode().substring(0, 8);
+
+                if (parents.containsKey(parentSubstring)) {
+                    parent = parents.get(parentSubstring);
+                }
 
                 if (parent != null) {
                     if (parent.getBranches() == null) {

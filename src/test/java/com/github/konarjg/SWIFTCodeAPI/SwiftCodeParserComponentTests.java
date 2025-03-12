@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -182,7 +181,45 @@ public class SwiftCodeParserComponentTests {
         List<SwiftCode> result = parser.parseCodes(file);
 
         //Assert
-        System.out.println(result.get(0).getSwiftCode());
         assertTrue(result.stream().anyMatch(code -> code.isHeadquarter() && !code.getBranches().isEmpty()));
+    }
+
+    @Test
+    public void parseCodes_forFinalProductionFile_shouldReturnListWithAllCodes() {
+        //Arrange
+        SwiftCodeParser parser = new SwiftCodeParserComponent();
+        File file = createTempSpreadsheet(4);
+
+        //Act
+        List<SwiftCode> result = parser.parseCodes(file);
+
+        //Assert
+        assertEquals(1061, result.size());
+    }
+
+    @Test
+    public void parseCodes_forFinalProductionFile_shouldContainExactly696HeadquartersCodes() {
+        //Arrange
+        SwiftCodeParser parser = new SwiftCodeParserComponent();
+        File file = createTempSpreadsheet(4);
+
+        //Act
+        List<SwiftCode> result = parser.parseCodes(file);
+
+        //Assert
+        assertEquals(696, result.stream().filter(SwiftCode::isHeadquarter).count());
+    }
+
+    @Test
+    public void parseCodes_forFinalProductionFile_shouldContainExactly365BranchCodes() {
+        //Arrange
+        SwiftCodeParser parser = new SwiftCodeParserComponent();
+        File file = createTempSpreadsheet(4);
+
+        //Act
+        List<SwiftCode> result = parser.parseCodes(file);
+
+        //Assert
+        assertEquals(365, result.stream().filter(code -> !code.isHeadquarter()).count());
     }
 }

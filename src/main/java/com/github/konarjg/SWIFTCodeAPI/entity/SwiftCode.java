@@ -1,5 +1,6 @@
 package com.github.konarjg.SWIFTCodeAPI.entity;
 
+import com.google.gson.Gson;
 import jakarta.persistence.*;
 
 import java.util.List;
