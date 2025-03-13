@@ -198,4 +198,46 @@ public class SwiftCodeRepositoryTests {
         List<SwiftCode> result = swiftCodeRepository.findAll();
         assertFalse(result.stream().anyMatch(code -> code.getSwiftCode().equals(code1.getSwiftCode())));
     }
+
+    @Test
+    public void findParentHeadquarters_whenDatabaseDoesNotContainValidCodes_shouldReturnNull() {
+        //Arrange
+        SwiftCode code = new SwiftCode();
+        code.setSwiftCode("HQ123456XXX");
+        code.setBankName("Bank A");
+        code.setCountryISO2("US");
+        code.setCountryName("United States");
+        code.setHeadquarter(true);
+
+        String parentCode = "KX513412";
+
+        swiftCodeRepository.save(code);
+
+        //Act
+        SwiftCode result = swiftCodeRepository.findParentHeadquarters(parentCode);
+
+        //Assert
+        assertNull(result);
+    }
+
+    @Test
+    public void findParentHeadquarters_whenDatabaseContainsValidCode_shouldReturnParentHeadquarters() {
+        //Arrange
+        SwiftCode code = new SwiftCode();
+        code.setSwiftCode("HQ123456XXX");
+        code.setBankName("Bank A");
+        code.setCountryISO2("US");
+        code.setCountryName("United States");
+        code.setHeadquarter(true);
+
+        String parentCode = "HQ123456";
+
+        swiftCodeRepository.save(code);
+
+        //Act
+        SwiftCode result = swiftCodeRepository.findParentHeadquarters(parentCode);
+
+        //Assert
+        assertEquals(code.getSwiftCode(), result.getSwiftCode());
+    }
 }
