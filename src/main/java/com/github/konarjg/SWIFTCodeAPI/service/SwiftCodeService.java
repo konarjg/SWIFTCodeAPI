@@ -67,6 +67,7 @@ public class SwiftCodeService {
             return;
         }
 
-        swiftCodeParser.parseCodes(file);
+        List<SwiftCode> codes = swiftCodeParser.parseCodes(file);
+        swiftCodeRepository.saveAll(codes);
     }
 }
