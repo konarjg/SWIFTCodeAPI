@@ -30,15 +30,6 @@ public class SwiftCodeControllerUnitTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @AfterEach
-    public void cleanUp() throws IOException {
-        File file = new File("data.xlsx");
-
-        if (file.exists()) {
-            Files.delete(file.toPath());
-        }
-    }
-
     @Test
     public void getSwiftCodeDetails_whenSwiftCodeIsNotInDatabase_shouldReturnNotFoundStatus() throws Exception {
         String swiftCode = "test";

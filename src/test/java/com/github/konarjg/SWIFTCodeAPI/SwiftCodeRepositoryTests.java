@@ -5,7 +5,9 @@ import com.github.konarjg.SWIFTCodeAPI.repository.SwiftCodeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
+import java.lang.reflect.Executable;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -239,5 +241,55 @@ public class SwiftCodeRepositoryTests {
 
         //Assert
         assertEquals(code.getSwiftCode(), result.getSwiftCode());
+    }
+
+    @Test
+    public void save_whenSwiftCodeAlreadyExists_shouldThrowDataIntegrityException() {
+        //Arrange
+        SwiftCode code = new SwiftCode();
+        code.setSwiftCode("HQ123456");
+        code.setBankName("Bank A");
+        code.setCountryISO2("US");
+        code.setCountryName("United States");
+        code.setHeadquarter(false);
+        swiftCodeRepository.save(code);
+
+        SwiftCode code1 = new SwiftCode();
+        code1.setSwiftCode("HQ123456");
+        code1.setBankName("Bank B");
+        code1.setCountryISO2("US");
+        code1.setCountryName("United States");
+        code1.setHeadquarter(false);
+
+        //Act
+        Runnable action = () -> swiftCodeRepository.save(code1);
+
+        //Assert
+        assertThrows(DataIntegrityViolationException.class, action::run);
+    }
+
+    @Test
+    public void save_whenSwiftCodeWithoutWhitespacesAlreadyExists_shouldThrowDataIntegrityException() {
+        //Arrange
+        SwiftCode code = new SwiftCode();
+        code.setSwiftCode("HQ123456");
+        code.setBankName("Bank A");
+        code.setCountryISO2("US");
+        code.setCountryName("United States");
+        code.setHeadquarter(false);
+        swiftCodeRepository.save(code);
+
+        SwiftCode code1 = new SwiftCode();
+        code1.setSwiftCode("  HQ 123 456   ");
+        code1.setBankName("Bank B");
+        code1.setCountryISO2("US");
+        code1.setCountryName("United States");
+        code1.setHeadquarter(false);
+
+        //Act
+        Runnable action = () -> swiftCodeRepository.save(code1);
+
+        //Assert
+        assertThrows(DataIntegrityViolationException.class, action::run);
     }
 }

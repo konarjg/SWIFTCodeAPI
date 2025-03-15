@@ -19,7 +19,7 @@ public class SwiftCode {
     private String countryName;
     @Column(name = "address", nullable = true)
     private String address;
-    @Column(name = "swiftCode", nullable = false)
+    @Column(name = "swiftCode", nullable = false, unique = true)
     private String swiftCode;
     @Column(name = "isHeadquarter", nullable = false)
     private boolean isHeadquarter;
@@ -76,7 +76,7 @@ public class SwiftCode {
     }
 
     public void setSwiftCode(String swiftCode) {
-        this.swiftCode = swiftCode;
+        this.swiftCode = swiftCode.replaceAll("\\s", "");
     }
 
     public boolean isHeadquarter() {
