@@ -32,7 +32,6 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
         result.setAddress(address);
         result.setCountryName(countryName);
         result.setHeadquarter(isHeadquarter);
-        result.setHeadquartersCode(null);
         result.setBranches(new ArrayList<>());
 
         return result;
@@ -91,7 +90,7 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
                     parent = parents.get(parentSubstring);
                 }
 
-                if (parent != null) {
+                if (parent != null && !parent.getSwiftCode().equals(code.getSwiftCode())) {
                     if (parent.getBranches() == null) {
                         parent.setBranches(new ArrayList<>());
                     }

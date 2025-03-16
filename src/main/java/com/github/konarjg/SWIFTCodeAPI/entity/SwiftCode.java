@@ -24,11 +24,8 @@ public class SwiftCode {
     @Column(name = "isHeadquarter", nullable = false)
     private boolean isHeadquarter;
 
-    @ManyToOne
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "headquartersCodeId")
-    private SwiftCode headquartersCode;
-
-    @OneToMany(mappedBy = "headquartersCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SwiftCode> branches;
 
     public long getSwiftCodeId() {
@@ -85,14 +82,6 @@ public class SwiftCode {
 
     public void setHeadquarter(boolean headquarter) {
         isHeadquarter = headquarter;
-    }
-
-    public SwiftCode getHeadquartersCode() {
-        return headquartersCode;
-    }
-
-    public void setHeadquartersCode(SwiftCode headquartersCode) {
-        this.headquartersCode = headquartersCode;
     }
 
     public List<SwiftCode> getBranches() {
