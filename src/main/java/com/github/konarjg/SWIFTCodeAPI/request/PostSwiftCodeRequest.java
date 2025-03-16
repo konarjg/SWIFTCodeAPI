@@ -1,5 +1,15 @@
 package com.github.konarjg.SWIFTCodeAPI.request;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({
+        "address",
+        "bankName",
+        "countryISO2",
+        "countryName",
+        "isHeadquarter",
+        "swiftCode"
+})
 public class PostSwiftCodeRequest {
     private String address;
     private String bankName;
@@ -40,11 +50,11 @@ public class PostSwiftCodeRequest {
         this.countryName = countryName;
     }
 
-    public boolean isHeadquarter() {
+    public boolean getIsHeadquarter() {
         return isHeadquarter;
     }
 
-    public void setHeadquarter(boolean headquarter) {
+    public void setIsHeadquarter(boolean headquarter) {
         isHeadquarter = headquarter;
     }
 
