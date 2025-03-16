@@ -41,6 +41,10 @@ public class SwiftCode {
     }
 
     public void setBankName(String bankName) {
+        if (bankName == null) {
+            return;
+        }
+
         this.bankName = bankName;
     }
 
@@ -73,6 +77,11 @@ public class SwiftCode {
     }
 
     public void setSwiftCode(String swiftCode) {
+        if (swiftCode == null) {
+            swiftCode = null;
+            return;
+        }
+
         this.swiftCode = swiftCode.replaceAll("\\s", "");
     }
 
