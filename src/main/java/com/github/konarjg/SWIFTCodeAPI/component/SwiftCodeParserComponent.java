@@ -57,7 +57,7 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
             data.put("swiftCode", row.getCell(1).getStringCellValue());
             data.put("bankName", row.getCell(3).getStringCellValue());
             data.put("address", row.getCell(4).getStringCellValue());
-            data.put("countryName", row.getCell(7).getStringCellValue());
+            data.put("countryName", row.getCell(6).getStringCellValue());
 
             SwiftCode code = parseCode(data);
 

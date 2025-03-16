@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -77,5 +79,40 @@ public class SwiftCodeControllerUnitTests {
                 .andExpect(jsonPath("$.isHeadquarter").value(expected.isHeadquarter()))
                 .andExpect(jsonPath("$.bankName").value(expected.getBankName()))
                 .andExpect(jsonPath("$.address").value(expected.getAddress()));
+    }
+
+    @Test
+    public void getAllSwiftCodesByCountry_whenNoMatchingCodesInDatabase_shouldReturnNotFoundStatus() throws Exception {
+        String countryISO2 = "US";
+
+        when(swiftCodeService.findAllByCountryISO2(countryISO2)).thenReturn(List.of());
+
+        mockMvc.perform(get("/v1/swift-codes/country/" + countryISO2)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getAllSwiftCodesByCountry_whenOneMatchingCodeInDatabase_shouldReturnValidResponse() throws Exception {
+        String countryISO2 = "US";
+        SwiftCode expected = new SwiftCode();
+        expected.setSwiftCode("BCHICLRMIOB");
+        expected.setCountryName("CHILE");
+        expected.setCountryISO2(countryISO2);
+        expected.setBankName("BANCO DE CHILE");
+        expected.setHeadquarter(false);
+
+        List<SwiftCode> codes = new ArrayList<>();
+        codes.add(expected);
+
+        when(swiftCodeService.findAllByCountryISO2(countryISO2)).thenReturn(codes);
+
+        mockMvc.perform(get("/v1/swift-codes/country/" + countryISO2))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.countryISO2").value(expected.getCountryISO2()))
+                .andExpect(jsonPath("$.countryName").value(expected.getCountryName()))
+                .andExpect(jsonPath("$.swiftCodes[0].address").value(expected.getAddress()))
+                .andExpect(jsonPath("$.swiftCodes[0].bankName").value(expected.getBankName()))
+                .andExpect(jsonPath("$.swiftCodes[0].countryISO2").value(expected.getCountryISO2()))
+                .andExpect(jsonPath("$.swiftCodes[0].isHeadquarter").value(expected.isHeadquarter()))
+                .andExpect(jsonPath("$.swiftCodes[0].swiftCode").value(expected.getSwiftCode()));
     }
 }

@@ -1,11 +1,18 @@
 package com.github.konarjg.SWIFTCodeAPI.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.util.List;
 
-public class SwiftCodesByCountryResponse {
+@JsonPropertyOrder({
+        "countryISO2",
+        "countryName",
+        "swiftCodes"
+})
+public class GetSwiftCodesByCountryResponse {
     private String countryISO2;
     private String countryName;
-    private List<CountrySwiftCodeResponse> swiftCodes;
+    private List<GetSwiftCodeByCountry> swiftCodes;
 
     public String getCountryISO2() {
         return countryISO2;
@@ -23,11 +30,11 @@ public class SwiftCodesByCountryResponse {
         this.countryName = countryName;
     }
 
-    public List<CountrySwiftCodeResponse> getSwiftCodes() {
+    public List<GetSwiftCodeByCountry> getSwiftCodes() {
         return swiftCodes;
     }
 
-    public void setSwiftCodes(List<CountrySwiftCodeResponse> swiftCodes) {
+    public void setSwiftCodes(List<GetSwiftCodeByCountry> swiftCodes) {
         this.swiftCodes = swiftCodes;
     }
 }

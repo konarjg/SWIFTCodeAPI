@@ -1,6 +1,15 @@
 package com.github.konarjg.SWIFTCodeAPI.response;
 
-public class CountrySwiftCodeResponse {
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({
+        "address",
+        "bankName",
+        "countryISO2",
+        "isHeadquarter",
+        "swiftCode"
+})
+public class GetSwiftCodeByCountry {
     private String address;
     private String bankName;
     private String countryISO2;
@@ -31,11 +40,11 @@ public class CountrySwiftCodeResponse {
         this.countryISO2 = countryISO2;
     }
 
-    public boolean isHeadquarter() {
+    public boolean getIsHeadquarter() {
         return isHeadquarter;
     }
 
-    public void setHeadquarter(boolean headquarter) {
+    public void setIsHeadquarter(boolean headquarter) {
         isHeadquarter = headquarter;
     }
 
