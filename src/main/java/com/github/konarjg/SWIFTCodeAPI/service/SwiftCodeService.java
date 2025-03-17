@@ -3,6 +3,7 @@ package com.github.konarjg.SWIFTCodeAPI.service;
 import com.github.konarjg.SWIFTCodeAPI.component.SwiftCodeParser;
 import com.github.konarjg.SWIFTCodeAPI.entity.SwiftCode;
 import com.github.konarjg.SWIFTCodeAPI.repository.SwiftCodeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,7 @@ public class SwiftCodeService {
         }
     }
 
+    @Transactional
     public boolean deleteBySwiftCode(String swiftCode) {
         try {
             if (swiftCodeRepository.findBySwiftCode(swiftCode) == null) {
