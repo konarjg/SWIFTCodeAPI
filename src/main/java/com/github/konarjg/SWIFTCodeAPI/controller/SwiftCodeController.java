@@ -1,18 +1,19 @@
 package com.github.konarjg.SWIFTCodeAPI.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.konarjg.SWIFTCodeAPI.component.SpreadsheetDataProvider;
 import com.github.konarjg.SWIFTCodeAPI.entity.SwiftCode;
 import com.github.konarjg.SWIFTCodeAPI.entity.SwiftCodeFactory;
 import com.github.konarjg.SWIFTCodeAPI.request.PostSwiftCodeRequest;
-import com.github.konarjg.SWIFTCodeAPI.response.*;
+import com.github.konarjg.SWIFTCodeAPI.response.PostSwiftCodeResponse;
 import com.github.konarjg.SWIFTCodeAPI.response.factory.DeleteSwiftCodeResponseFactory;
 import com.github.konarjg.SWIFTCodeAPI.response.factory.GetSwiftCodeResponseFactory;
 import com.github.konarjg.SWIFTCodeAPI.response.factory.GetSwiftCodesByCountryResponseFactory;
 import com.github.konarjg.SWIFTCodeAPI.response.factory.PostSwiftCodeResponseFactory;
 import com.github.konarjg.SWIFTCodeAPI.service.SwiftCodeService;
-import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,6 +30,7 @@ public class SwiftCodeController {
     }
 
     @GetMapping("/swift-codes/{swift-code}")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public ResponseEntity<?> getSwiftCodeDetails(@PathVariable("swift-code") String swiftCode) {
         SwiftCode code = swiftCodeService.findBySwiftCode(swiftCode);
 
@@ -44,6 +46,7 @@ public class SwiftCodeController {
     }
 
     @GetMapping("/swift-codes/country/{countryISO2code}")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public ResponseEntity<?> getAllSwiftCodesByCountry(@PathVariable("countryISO2code") String countryISO2) {
         List<SwiftCode> codes = swiftCodeService.findAllByCountryISO2(countryISO2);
 
@@ -55,7 +58,8 @@ public class SwiftCodeController {
     }
 
     @PostMapping("/swift-codes")
-    public ResponseEntity<PostSwiftCodeResponse> addSwiftCode(@RequestBody PostSwiftCodeRequest request) {
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<PostSwiftCodeResponse> addSwiftCode(@RequestBody PostSwiftCodeRequest request) throws JsonProcessingException {
         if (request == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -76,6 +80,7 @@ public class SwiftCodeController {
     }
 
     @DeleteMapping("/swift-codes/{swift-code}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<?> deleteSwiftCode(@PathVariable("swift-code") String swiftCode) {
         boolean result = swiftCodeService.deleteBySwiftCode(swiftCode);
 

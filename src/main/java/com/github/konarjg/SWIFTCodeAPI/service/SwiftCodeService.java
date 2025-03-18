@@ -31,6 +31,10 @@ public class SwiftCodeService {
 
     public boolean saveSwiftCode(SwiftCode swiftCode) {
         try {
+            if (swiftCode.getSwiftCode().length() < 8) {
+                return false;
+            }
+
             String parentCode = swiftCode.getSwiftCode().substring(0, 8);
             SwiftCode parentHeadquarters = swiftCodeRepository.findParentHeadquarters(parentCode);
 

@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -43,6 +46,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER"})
     public void getSwiftCodeDetails_whenCodeIsNotInDatabase_shouldReturnNotFoundStatus() throws Exception {
         String swiftCode = "test";
 
@@ -51,6 +55,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER"})
     public void getSwiftCodeDetails_whenCodeIsInDatabase_shouldReturnValidResponse() throws Exception {
         String swiftCode = "AAISALTRXXX";
 
@@ -66,6 +71,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER"})
     public void getAllSwiftCodesByCountry_whenNoValidCodesExist_shouldReturnNotFoundStatus() throws Exception {
         String countryISO2 = "US";
 
@@ -74,6 +80,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER"})
     public void getAllSwiftCodesByCountry_whenValidCodesExist_shouldReturnOkStatus() throws Exception {
         String countryISO2 = "AL";
 
@@ -82,6 +89,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER"})
     public void getAllSwiftCodesByCountry_whenValidCodesExist_shouldReturnValidResponse() throws Exception {
         String countryISO2 = "AL";
 
@@ -91,6 +99,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER", "SCOPE_ADMIN"})
     public void addSwiftCode_whenCodeIsAlreadyInDatabase_shouldReturnUnprocessableEntityStatus() throws Exception {
         SwiftCode swiftCode = new SwiftCode();
         swiftCode.setSwiftCode("AAISALTRXXX");
@@ -109,6 +118,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER", "SCOPE_ADMIN"})
     public void addSwiftCode_whenCodeIsNotInDatabase_shouldReturnCreatedStatus() throws Exception {
         SwiftCode swiftCode = new SwiftCode();
         swiftCode.setSwiftCode("AAISALBTRXXX");
@@ -127,6 +137,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER", "SCOPE_ADMIN"})
     public void addSwiftCode_whenCodeIsNotInDatabase_shouldAddSwiftCodeToDatabase() throws Exception {
         SwiftCode swiftCode = new SwiftCode();
         swiftCode.setSwiftCode("AAISALBTRXXX");
@@ -146,6 +157,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER", "SCOPE_ADMIN"})
     public void deleteSwiftCode_whenCodeIsNotInDatabase_shouldReturnNotFoundStatus() throws Exception {
         String swiftCode = "AAISALCTRXXX";
 
@@ -154,6 +166,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER", "SCOPE_ADMIN"})
     public void deleteSwiftCode_whenCodeIsInDatabase_shouldReturnNoContentStatus() throws Exception {
         String swiftCode = "AAISALTRXXX";
 
@@ -162,6 +175,7 @@ public class SwiftCodeControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="test", authorities = {"SCOPE_USER", "SCOPE_ADMIN"})
     public void deleteSwiftCode_whenCodeIsInDatabase_shouldDeleteTheCodeFromDatabase() throws Exception {
         String swiftCode = "AAISALTRXXX";
 
