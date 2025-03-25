@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,12 +69,13 @@ public class SwiftCodeService {
         }
     }
 
-    public void initializeDatabaseWithParsedCodesWhenEmpty(File file) {
+    public void initializeDatabaseWithParsedCodesWhenEmpty(InputStream stream) {
         if (swiftCodeRepository.count() > 0) {
             return;
         }
 
-        List<SwiftCode> codes = swiftCodeParser.parseCodes(file);
+        List<SwiftCode> codes = swiftCodeParser.parseCodes(stream);
+        System.out.println("Loaded " + codes.size() + " codes from file");
         swiftCodeRepository.saveAll(codes);
     }
 }

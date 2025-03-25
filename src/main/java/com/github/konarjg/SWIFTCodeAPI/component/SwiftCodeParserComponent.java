@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,13 +72,12 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
     }
 
     @Override
-    public List<SwiftCode> parseCodes(File file) {
-        if (file == null || !file.exists()) {
+    public List<SwiftCode> parseCodes(InputStream stream) {
+        if (stream == null) {
             return List.of();
         }
 
-        try (FileInputStream inputStream = new FileInputStream(file);
-             Workbook workbook = WorkbookFactory.create(inputStream)) {
+        try (Workbook workbook = WorkbookFactory.create(stream)) {
 
             HashMap<String, SwiftCode> parents = new HashMap<>();
             List<SwiftCode> result = readSpreadsheet(workbook, parents);
@@ -99,6 +99,7 @@ public class SwiftCodeParserComponent implements SwiftCodeParser {
                 }
             }
 
+            stream.close();
             return result;
         } catch (Exception e) {
             return new ArrayList<>();

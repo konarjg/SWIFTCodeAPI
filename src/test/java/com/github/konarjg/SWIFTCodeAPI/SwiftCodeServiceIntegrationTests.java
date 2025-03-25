@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -383,7 +381,7 @@ public class SwiftCodeServiceIntegrationTests {
     }
 
     @Test
-    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsNotEmpty_shouldNotParseCodes() {
+    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsNotEmpty_shouldNotParseCodes() throws FileNotFoundException {
         //Arrange
         SwiftCodeParser swiftCodeParser = new SwiftCodeParserComponent();
         SwiftCodeService swiftCodeService = new SwiftCodeService(swiftCodeParser, swiftCodeRepository);
@@ -398,21 +396,21 @@ public class SwiftCodeServiceIntegrationTests {
         swiftCodeRepository.save(code);
 
         //Act
-        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(file);
+        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(new FileInputStream(file));
 
         //Assert
         assertEquals(1, swiftCodeRepository.count());
     }
 
     @Test
-    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsEmpty_shouldParseCodesAndFillDatabase() {
+    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsEmpty_shouldParseCodesAndFillDatabase() throws FileNotFoundException {
         //Arrange
         SwiftCodeParser swiftCodeParser = new SwiftCodeParserComponent();
         SwiftCodeService swiftCodeService = new SwiftCodeService(swiftCodeParser, swiftCodeRepository);
         File file = createTempSpreadsheet(4);
 
         //Act
-        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(file);
+        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(new FileInputStream(file));
 
         //Assert
         assertEquals(1061, swiftCodeRepository.count());

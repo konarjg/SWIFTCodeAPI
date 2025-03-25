@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -322,36 +325,36 @@ public class SwiftCodeServiceUnitTests {
     }
 
     @Test
-    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsNotEmpty_shouldNotAddEntities() {
+    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsNotEmpty_shouldNotAddEntities() throws FileNotFoundException {
         //Arrange
         SwiftCodeRepository swiftCodeRepository = mock(SwiftCodeRepository.class);
         when(swiftCodeRepository.count()).thenReturn(1L);
         SwiftCodeParser swiftCodeParser = mock(SwiftCodeParser.class);
-        File file = mock(File.class);
+        InputStream stream = mock(InputStream.class);
 
         SwiftCodeService swiftCodeService = new SwiftCodeService(swiftCodeParser, swiftCodeRepository);
 
         //Act
-        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(file);
+        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(stream);
 
         //Assert
-        verify(swiftCodeParser, times(0)).parseCodes(file);
+        verify(swiftCodeParser, times(0)).parseCodes(stream);
     }
 
     @Test
-    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsEmpty_shouldAddEntities() {
+    public void initializeDatabaseWithParsedCodesWhenEmpty_whenDatabaseIsEmpty_shouldAddEntities() throws FileNotFoundException {
         //Arrange
         SwiftCodeRepository swiftCodeRepository = mock(SwiftCodeRepository.class);
         when(swiftCodeRepository.count()).thenReturn(0L);
         SwiftCodeParser swiftCodeParser = mock(SwiftCodeParser.class);
-        File file = mock(File.class);
+        InputStream stream = mock(InputStream.class);
 
         SwiftCodeService swiftCodeService = new SwiftCodeService(swiftCodeParser, swiftCodeRepository);
 
         //Act
-        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(file);
+        swiftCodeService.initializeDatabaseWithParsedCodesWhenEmpty(stream);
 
         //Assert
-        verify(swiftCodeParser, times(1)).parseCodes(file);
+        verify(swiftCodeParser, times(1)).parseCodes(stream);
     }
 }
