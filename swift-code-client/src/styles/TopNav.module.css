@@ -4,6 +4,7 @@
     color: inherit;
     display: flex;
     flex-direction: row;
+    gap: 1vw;
 }
 
 .menu {

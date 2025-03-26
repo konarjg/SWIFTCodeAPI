@@ -17,6 +17,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
@@ -32,9 +39,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+        return http.cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .oauth2ResourceServer(configurer -> configurer.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(configurer -> configurer.jwt(withDefaults()))
                 .build();
     }
 
@@ -43,4 +50,15 @@ public class SecurityConfig {
         return NimbusJwtDecoder.withSecretKey(appJwtProperties.getKey()).build();
     }
 
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // Allow cookies and credentials
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001")); // Allow requests from React dev server
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed HTTP methods
+        config.setAllowedHeaders(List.of("*")); // Allow any headers
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 }

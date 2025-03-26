@@ -1,0 +1,28 @@
+.sidebar {
+    width: 21vw;
+    height: 90vh;
+    position: fixed;
+    left: -21vw;
+    top: 5vh;
+    background-color: #9BC6E3;
+    color: #070738;
+    font-size: 24px;
+    padding: 1vh;
+    transition: 0.5s ease-in-out left;
+    display: flex;
+    flex-direction: column;
+}
+
+.link {
+    color: inherit;
+    text-decoration: none;
+    padding: 1vh;
+}
+
+.link:visited {
+    color: inherit;
+}
+
+.link:hover {
+    color: #07073880;
+}
