@@ -1,0 +1,32 @@
+.page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    width: 100vw;
+    height: auto;
+    background-color:#2E2E2E;
+    color: #E0E0E0;
+    padding: 1vh;
+    font-size: 24px;
+}
+
+.content {
+    flex: 1;
+    background-color: #3A3A3A;
+    color: #F5F5F5;
+    padding: 1vh;
+}
+
+.footer {
+    width: 100%;
+    height: auto;
+    padding: 1vh;
+    font-size: 16px;
+    text-align: center;
+    background-color: #1F1F1F;
+    color: #B3B3B3;
+}
