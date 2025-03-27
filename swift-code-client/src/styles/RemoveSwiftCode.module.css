@@ -31,6 +31,7 @@
     flex-direction: column;
     font-size: 20px;
     align-items: center;
+    align-content: center;
 }
 
 .footer {
@@ -43,41 +44,39 @@
     color: white;
 }
 
-.searchForm {
-    width: auto;
-    height: auto;
-    font-size: 20px;
-    left: 25vw;
-    position: fixed;
-    top: 1vh;
+.removeForm {
+    width: 50vw;
+    height: 50vh;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5vw;
-    color:white;
-}
-
-.searchLabel {
-    width: auto;
-    height: auto;
-}
-
-.searchField {
-    width: 20vw;
-    height: 3vh;
-    padding: 0.1vh;
+    flex-direction: column;
+    gap: 1vh;
     font-size: inherit;
 }
 
-.searchButton {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-size: inherit;
+.removeButton {
+    width: 25%;
+    height: 10%;
+    border: 1px solid transparent;
+    border-radius: 40px;
+    background: linear-gradient(90deg, #1D5562 -48.75%, #2C7A94 153.75%);
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
     cursor: pointer;
-    color: inherit;
 }
 
-.searchButton:hover {
-    color: #ffffff80;
+.removeInput {
+    height: 10%;
+    font-size: inherit;
+}
+
+.removeButton:hover {
+    background: fixed;
+    background-color: rgb(4, 130, 158);
+}
+
+.responseMessageLabel {
+    min-width: 100%;
+    min-height: 4%;
+    text-align: center;
 }

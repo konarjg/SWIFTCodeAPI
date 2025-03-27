@@ -269,13 +269,13 @@ public class SwiftCodeControllerUnitTests {
     }
 
     @Test
-    public void deleteSwiftCode_whenSwiftCodeIsInDatabase_shouldReturnNoContentStatus() throws Exception {
+    public void deleteSwiftCode_whenSwiftCodeIsInDatabase_shouldReturnOkStatus() throws Exception {
         String swiftCode = "AAISALTRXXX";
 
         when(swiftCodeService.deleteBySwiftCode(swiftCode)).thenReturn(true);
 
         mockMvc.perform(delete("/v1/swift-codes/" + swiftCode))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test

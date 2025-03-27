@@ -90,7 +90,7 @@ public class SwiftCodeController {
                             .createDeleteSwiftCodeResponse("Could not delete provided SWIFT code because no matching SWIFT code was found in the database!"));
         }
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(DeleteSwiftCodeResponseFactory
                         .createDeleteSwiftCodeResponse("Provided SWIFT code was successfully removed from the database!"));
     }

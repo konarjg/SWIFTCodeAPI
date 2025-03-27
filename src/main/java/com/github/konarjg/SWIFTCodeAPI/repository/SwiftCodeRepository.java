@@ -12,5 +12,7 @@ public interface SwiftCodeRepository extends JpaRepository<SwiftCode, Long> {
     public SwiftCode findBySwiftCode(String swiftCode);
     @Query("SELECT s FROM SwiftCodes s WHERE SUBSTRING(s.swiftCode, 1, 8) = :parentCode AND s.isHeadquarter = true")
     public SwiftCode findParentHeadquarters(@Param("parentCode") String parentCode);
+    @Query("SELECT s FROM SwiftCodes s WHERE SUBSTRING(s.swiftCode, 1, 8) = :parentCode")
+    public List<SwiftCode> findBranches(@Param("parentCode") String parentCode);
     public void deleteBySwiftCode(String swiftCode);
 }

@@ -244,6 +244,47 @@ public class SwiftCodeRepositoryTests {
     }
 
     @Test
+    public void findBranches_whenDatabaseDoesNotContainValidCodes_shouldReturnEmptyList() {
+        //Arrange
+        String parentCode = "KX513412";
+
+        //Act
+        List<SwiftCode> branches = swiftCodeRepository.findBranches(parentCode);
+
+        //Assert
+        assertTrue(branches.isEmpty());
+    }
+
+    @Test
+    public void findBranches_whenDatabaseContainsValidCodes_shouldReturnAllBranches() {
+        //Arrange
+        SwiftCode code = new SwiftCode();
+        code.setSwiftCode("HQ123456XXX");
+        code.setBankName("Bank A");
+        code.setCountryISO2("US");
+        code.setCountryName("United States");
+        code.setHeadquarter(true);
+
+        SwiftCode code1 = new SwiftCode();
+        code1.setSwiftCode("HQ123456ADA");
+        code1.setBankName("Bank A");
+        code1.setCountryISO2("US");
+        code1.setCountryName("United States");
+        code1.setHeadquarter(false);
+
+        String parentCode = "HQ123456";
+
+        swiftCodeRepository.save(code);
+        swiftCodeRepository.save(code1);
+
+        //Act
+        List<SwiftCode> result = swiftCodeRepository.findBranches(parentCode);
+
+        //Assert
+        assertEquals(2, result.size());
+    }
+
+    @Test
     public void save_whenSwiftCodeAlreadyExists_shouldThrowDataIntegrityException() {
         //Arrange
         SwiftCode code = new SwiftCode();

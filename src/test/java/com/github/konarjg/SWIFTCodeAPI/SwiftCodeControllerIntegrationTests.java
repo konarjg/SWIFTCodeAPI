@@ -173,11 +173,11 @@ public class SwiftCodeControllerIntegrationTests {
 
     @Test
     @WithMockUser(username="test", authorities = {"SCOPE_USER", "SCOPE_ADMIN"})
-    public void deleteSwiftCode_whenCodeIsInDatabase_shouldReturnNoContentStatus() throws Exception {
+    public void deleteSwiftCode_whenCodeIsInDatabase_shouldReturnOkStatus() throws Exception {
         String swiftCode = "AAISALTRXXX";
 
         mockMvc.perform(delete("/v1/swift-codes/" + swiftCode))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -186,7 +186,7 @@ public class SwiftCodeControllerIntegrationTests {
         String swiftCode = "AAISALTRXXX";
 
         mockMvc.perform(delete("/v1/swift-codes/" + swiftCode))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
         assertNull(swiftCodeService.findBySwiftCode(swiftCode));
     }

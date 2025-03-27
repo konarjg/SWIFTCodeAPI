@@ -2,18 +2,17 @@ import {React, useRef, useState} from 'react';
 import {TopNav} from '../components/TopNav';
 import { Sidebar } from '../components/Sidebar';
 import { useSidebar } from '../hooks/useSidebar';
-import styles from '../styles/GetSwiftCodeDetails.module.css';
-import { HeadquarterCodeDetails } from '../components/HeadquarterCodeDetails';
+import styles from '../styles/GetSwiftCodesByCountry.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import { useSwiftCodeService } from '../api/useSwiftCodeService';
 import { BranchCodeDetails } from '../components/BranchCodeDetails';
 
-export function GetSwiftCodeDetails() {
+export function GetSwiftCodesByCountry() {
     const [sidebarRef, handleSidebar] = useSidebar();
     const searchFieldRef = useRef(null);
-    const [getSwiftCodeDetails] = useSwiftCodeService();
-    const [details, setDetails] = useState(null);
+    const [getSwiftCodeDetails, getSwiftCodesByCountry, addSwiftCode, removeSwiftCode] = useSwiftCodeService();
+    const [codes, setCodes] = useState(null);
 
     function handleSearchChange() {
         const input = searchFieldRef.current.value;
@@ -23,9 +22,9 @@ export function GetSwiftCodeDetails() {
 
     const handleSearch = async (event) => {
         event.preventDefault();
-        const swiftCode = searchFieldRef.current.value;
-        const details = await getSwiftCodeDetails(swiftCode);
-        setDetails(details);
+        const countryISO2 = searchFieldRef.current.value;
+        const codes = await getSwiftCodesByCountry(countryISO2);
+        setCodes(codes);
     }
 
     return (
@@ -38,22 +37,25 @@ export function GetSwiftCodeDetails() {
 
             <section className={styles.content}>
                 <form className={styles.searchForm}>
-                    <label className={styles.searchLabel}>Find SWIFT code details</label>
+                    <label className={styles.searchLabel}>Find SWIFT codes by country ISO2 code</label>
                     <input ref={searchFieldRef} type="text" className={styles.searchField} minLength="11" maxLength="11" onChange={handleSearchChange}/>
                     <button className={styles.searchButton} onClick={(event) => handleSearch(event)}><FontAwesomeIcon icon={faSearch} /></button>
                 </form>
                 
                 {   
-                    details !== null ?
-                    ( details.isHeadquarter ? <HeadquarterCodeDetails code={details}/>
-                        : <BranchCodeDetails code={details} />
-                    ) : <p>
-                        Welcome to the SWIFT Code Lookup page! 
-                        Here, you can effortlessly find detailed information about any SWIFT code.
-                        Simply enter the SWIFT code into the search field located in the top navigation bar. 
-                        Once you've typed it in, click the magnifying glass icon to initiate the search. 
-                        Instantly, you'll see detailed results related to the specific SWIFT code you entered—whether it's the associated bank, 
-                        branch location, or additional metadata.
+                    codes !== null ?
+                    <article>
+                        <h1>SWIFT Codes in {codes.countryName}</h1>
+                        <p>Country name: {codes.countryName}</p>
+                        <p>Country ISO2: {codes.countryISO2}</p>
+
+                        {codes.swiftCodes.map(code => <BranchCodeDetails code={code} key={code.swiftCode}/>)}
+                    </article>
+                    : <p>
+                        On this page, you can effortlessly access all SWIFT codes for banks in a specific country using its ISO 2 code.
+                        These codes are crucial for international banking transactions, identifying banks and branches worldwide. 
+                        To get started, simply type the two-letter ISO 2 country code (e.g., "US" for the United States, "DE" for Germany, or "JP" for Japan) 
+                        in the search field located above.
                     </p>
                 }
             </section>

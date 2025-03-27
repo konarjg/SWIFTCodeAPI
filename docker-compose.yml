@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: swift_code_database
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: SWIFTCodes
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  springboot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: swift_code_api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/SWIFTCodes
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: qwerty
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+    depends_on:
+     - postgres
+
+  react:
+    build:
+      context: ./swift-code-client
+      dockerfile: Dockerfile
+    container_name: swift_code_client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - springboot
+
+volumes:
+  postgres_data:

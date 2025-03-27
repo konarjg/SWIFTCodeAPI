@@ -55,7 +55,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // Allow cookies and credentials
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001")); // Allow requests from React dev server
+        config.setAllowedOrigins(List.of("http://react:3000", "http://localhost:3000", "http://localhost:3001")); // Allow requests from React dev server
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed HTTP methods
         config.setAllowedHeaders(List.of("*")); // Allow any headers
         source.registerCorsConfiguration("/**", config);

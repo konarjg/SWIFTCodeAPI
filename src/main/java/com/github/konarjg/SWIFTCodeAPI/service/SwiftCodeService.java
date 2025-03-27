@@ -48,6 +48,11 @@ public class SwiftCodeService {
                 swiftCodeRepository.save(parentHeadquarters);
             }
 
+            if (swiftCode.isHeadquarter()) {
+                List<SwiftCode> branches = swiftCodeRepository.findBranches(parentCode);
+                swiftCode.setBranches(branches);
+            }
+
             swiftCodeRepository.save(swiftCode);
             return true;
         } catch (DataIntegrityViolationException | NullPointerException exception) {
